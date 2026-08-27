@@ -12,87 +12,29 @@ Check:
 - Password dependent
     - presence of repeated characters
     - presence of sequential characters
-    - presence of sequential characters in keyboard
-    - change of letters by numbers in known words
+    - change of letters by chars in known words
 
 
 Rank based on:
-- Each check is given a value from 1-10
-- Calculate the medium or other statistic value
-
-
-Steps:
-1. Input password
-2. Validate password
-3. Analyze password / give score
-4. Print out password strength
+- some OWASP standards found
 
 """
 
 from typing import List
 
-# Possible characters in a password:
-digits = "0123456789"
-lower_case = "abcdefghijklmnopqrstuvwxyz"
-upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-special_chars = "!@#$%&*()-_=+[]{}\\/?:;<>,.~^'\" "
 
-
-# Patterns in passwords: 
-most_common_passwords = [
-    "123456",
-    "admin",
-    "12345678",
-    "123456789",
-    "12345",
-    "password",
-    "Aa123456",
-    "1234567890",
-    "Pass@123",
-    "admin123",
-    "1234567",
-    "123123",
-    "111111",
-    "12345678910",
-    "P@ssw0rd",
-    "Password",
-    "Aa@123456",
-    "admintelecom",
-    "Admin@123",
-    "112233",
-]
-
-common_words = [
-    "admin",
-    "password",
-]
-
-leed_speak = {
-    "a": ["4", "@"], 
-    "b": ["8"], 
-    "c": ["(", "[", "<"], 
-    "e": ["3"], 
-    "g": ["6"], 
-    "h": ["#"], 
-    "i": ["1", "!", "|"], 
-    "o": ["0"], 
-    "s": ["5", "$"], 
-    "t": ["7"],
-}
-
-
-# Ask for password
-password = str(input("Insert your password for strength analysis: "))
-
-
+################################################
 # Check password length
 def check_password_length(password: str) -> int:
     if (len(password) < 12):
         print("Your password is too short. Should be at least 12 characters longs.")
     return len(password)
 
+################################################
 
 
+
+################################################
 # Analyze chars count
 def analyse_chars_count(password: str, digits: str, lower_case: str, upper_case: str, special_chars: str) -> int:
 
@@ -135,16 +77,22 @@ def count_chars(password: str, digits: str, lower_case: str, upper_case: str, sp
 
     return [count_digits, count_lower_case, count_upper_case, count_special]
 
+################################################
 
 
+
+################################################
 # Check for common passwords, (password, admin, ...):
 def check_presence_of_known_words(password: str, most_common_passwords: str) -> bool:
     if (password in most_common_passwords):
         print("Your password is a well known password. Choose a less generic one.")
     return  password in most_common_passwords
 
+################################################
 
 
+
+################################################
 # Check presence of repeated characters (aa, bbb, ...)
 def check_repeated_characters(password: str) -> float:
     repetitions = []
@@ -188,8 +136,11 @@ def check_repeated_characters(password: str) -> float:
     
     return round(total_repetitions/len(password) * 100, 2)
 
+################################################
 
 
+
+################################################
 # Check presence of sequential characters (123, abc, AbC, ...)
 def check_sequences(password: str, digits: str, lower_case: str, special_chars: str) -> float:
 
@@ -257,7 +208,7 @@ def check_sequences(password: str, digits: str, lower_case: str, special_chars: 
     total_sequences = 0
 
     if (len(sequences) != 0):
-            print("Your password should not have characters in sequence:", sequences)
+            print("Your password should not have sequential characters:", sequences)
             for seq in sequences:
                 total_sequences += len(seq)
         
@@ -283,8 +234,11 @@ def is_int(str: str) -> bool:
     except ValueError:
         return False
 
+################################################
 
 
+
+################################################
 # Check leet code in known words (p45$w0rd, @dm1n, ...)
 def check_leet_code(password: str, lower_case: str, common_words: str, leed_speak: str) -> bool:
 
@@ -311,14 +265,16 @@ def check_leet_code(password: str, lower_case: str, common_words: str, leed_spea
     for sub in substrings:
         if sub in common_words:
             words_replaced.append(sub)
-            print("Your password should not be a word with replaced letters:", sub)
+            print("Your password should contain a word with replaced letters:", password, "-->", sub)
 
     return (len(words_replaced) != 0)
 
+################################################
 
 
 
 
+################################################
 # Check password strength
 def check_password_strength(password, digits, lower_case, upper_case, special_chars, most_common_passwords, common_words, leed_speak):
 
@@ -357,4 +313,4 @@ def check_password_strength(password, digits, lower_case, upper_case, special_ch
 
     return
 
-check_password_strength(password, digits, lower_case, upper_case, special_chars, most_common_passwords, common_words, leed_speak)
+################################################
