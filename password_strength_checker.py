@@ -142,7 +142,7 @@ def check_repeated_characters(password: str) -> float:
 
 ################################################
 # Check presence of sequential characters (123, abc, AbC, ...)
-def check_sequences(password: str, digits: str, lower_case: str, special_chars: str) -> float:
+def check_sequences(password: str, digits: str, lower_case: str, special_chars: str, reversed_password = False) -> float:
 
     sequences = []
     lower_password = password.lower()
@@ -189,15 +189,24 @@ def check_sequences(password: str, digits: str, lower_case: str, special_chars: 
             
             if (j == len(password)-1 and is_sequence):
                 if (is_sequence): # last char is sequence
-                    sequences.append(password[i:j+1])
+                    if (reversed_password):
+                        sequences.append(password[i:j+1][::-1])
+                    else:
+                        sequences.append(password[i:j+1])
                     break
                 else: # last char is not sequence
-                    sequences.append(password[i:j])
+                    if (reversed_password):
+                        sequences.append(password[i:j][::-1])
+                    else:
+                        sequences.append(password[i:j])
                     break
 
             # "not is_sequence" from j-1 and j perspective, not i and j-1
             elif (not is_sequence) and (i < j-1):
-                sequences.append(password[i:j])
+                if (reversed_password):
+                    sequences.append(password[i:j][::-1])
+                else:
+                    sequences.append(password[i:j])
                 if (j == len(password)-1):
                     break
 
@@ -285,7 +294,7 @@ def check_password_strength(password, digits, lower_case, upper_case, special_ch
     zeros, digits_pct, lower_pct, upper_pct, special_pct = analyse_chars_count(password, digits, lower_case, upper_case, special_chars)
 
     # Check for common passwords
-    has_known_passwords = check_presence_of_known_words(password, most_common_passwords)
+    in_known_passwords = check_presence_of_known_words(password, most_common_passwords)
 
     # Check repeated characters
     repeated_pct = check_repeated_characters(password)
@@ -293,19 +302,22 @@ def check_password_strength(password, digits, lower_case, upper_case, special_ch
     # Check presence of sequential characters
     sequences_pct = check_sequences(password, digits, lower_case, special_chars)
 
+    # Check presence of sequential characters in reversed password (321 --> 123)
+    reversed_sequences_pct = check_sequences(password[::-1], digits, lower_case, special_chars, True)
+
     # Change of letters by numbers in known words
     has_leet_code_words = check_leet_code(password, lower_case, common_words, leed_speak)
 
 
     print("################################")
     password_strength = "Password strength: "
-    if ((length < 12) or has_known_passwords or has_leet_code_words or zeros > 0):
+    if ((length < 12) or in_known_passwords or has_leet_code_words or zeros > 0):
         password_strength += "Weak"
     else:
-        if (repeated_pct + sequences_pct >= 20.00):
+        if (repeated_pct + sequences_pct + reversed_sequences_pct >= 20.00):
             password_strength += "Medium"
         else:
-            if (repeated_pct + sequences_pct > 0) or ((digits_pct or lower_pct or upper_pct or special_pct) >= 75.00):
+            if (repeated_pct + sequences_pct + reversed_sequences_pct > 0) or ((digits_pct or lower_pct or upper_pct or special_pct) >= 75.00):
                 password_strength += "Strong"
             else:
                 password_strength +="Very strong"
