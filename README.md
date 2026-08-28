@@ -8,11 +8,13 @@ An script that takes as an input a password from the user, analyzes it and retur
 - [How to use it](#how-to-use)
 
 <a name="built-with">
+
 ## Built with
 This project was entirely built with python 3.13.5.
 
 
 <a name="project-structure">
+
 ## Project Structure
 ```
 Root()
@@ -22,6 +24,7 @@ Root()
 ```
 
 <a name="criteria">
+
 ## Criteria
 
 ### Characters, words and codes considered
@@ -117,6 +120,7 @@ else:
 
 
 <a name="how-to-use">
+
 ## How to use it
 Simply run this on a terminal under the project directory if you have python installed
 ```
