@@ -2,10 +2,10 @@
 An script that takes as an input a password from the user, analyzes it and return the strength of such based on criteria
 
 ## Table of contents
-- [Built with] (#built-with)
-- [Project Structure] (#project-structure)
-- [Criteria] (#criteria)
-- [How to use it] (#how-to-use)
+- [Built with](#built-with)
+- [Project Structure](#project-structure)
+- [Criteria](#criteria)
+- [How to use it](#how-to-use)
 
 <a name="built-with">
 ## Built with
